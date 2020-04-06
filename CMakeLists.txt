@@ -11,12 +11,12 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(googletest)
-if(NOT catch_POPULATED)
+if(NOT googletest_POPULATED)
   FetchContent_Populate(googletest)
   add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 endif()
 
-add_executable(run-crack src/main.cpp)
+add_executable(run-crack src/arrays_and_strings.cpp)
 
 target_link_libraries(run-crack gtest gtest_main pthread)
 
@@ -25,4 +25,3 @@ set_target_properties(run-crack PROPERTIES
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
 )
-	
