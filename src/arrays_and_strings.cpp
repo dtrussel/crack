@@ -84,7 +84,8 @@ bool is_palindrom(const std::string& input){
 std::vector<std::string> get_palindrom_permutations(std::string input){
   auto end = std::remove(input.begin(), input.end(), ' ');
   input.erase(end, input.end());
-  std::transform(input.begin(), input.end(), input.begin(), [](char c) { return std::tolower(c); });
+  std::transform(input.begin(), input.end(), input.begin(),
+                 [](char c) { return std::tolower(c); });
   std::sort(input.begin(), input.end());
   std::vector<std::string> ret;
   bool has_next = true;
@@ -106,4 +107,70 @@ TEST(Arrays_and_Strings, Question_1_4) {
   EXPECT_EQ(pals.size(), 6);
   pals = get_palindrom_permutations("abcdefg");
   EXPECT_EQ(pals.size(), 0);
+}
+
+/// Question 1.5
+
+// returns how many chars of `big` are missing from `small`
+unsigned num_of_removed_chars(const std::string& big,
+                              const std::string& small){
+  unsigned num_diff = 0;
+  auto bit = big.begin();
+  auto sit = small.begin();
+  while ((sit != small.end()) and (bit != big.end())) {
+    if (*bit != *sit) { ++num_diff; }
+    else              { ++sit; }
+    ++bit;
+  }
+  return num_diff + std::distance(bit, big.end());
+}
+
+unsigned num_of_altered_chars(const std::string& alpha,
+                              const std::string& beta){
+  assert(alpha.size() == beta.size());
+  unsigned num_alter = 0;
+  auto ait = alpha.begin();
+  auto bit = beta.begin();
+  while ((ait != alpha.end()) and (bit != beta.end())) {
+    if (*bit != *ait) { ++num_alter; }
+    ++ait;
+    ++bit;
+  }
+  return num_alter;
+}
+
+bool is_max_one_edit_away(std::string alpha, std::string beta){
+  bool ret = false;
+  if (alpha == beta) {
+    ret = true;
+  } else {
+    if (alpha.size() == beta.size()) {
+      ret = (1 == num_of_altered_chars(alpha, beta));
+    } else {
+      if (alpha.size() < beta.size()) { std::swap(alpha, beta); }
+      ret = (1 == num_of_removed_chars(alpha, beta));
+    }
+  }
+  return ret;
+}
+
+TEST(Arrays_and_Strings, Question_1_5) {
+    EXPECT_EQ(num_of_removed_chars("abc", "ac"), 1);
+    EXPECT_EQ(num_of_removed_chars("abc", "abc"), 0);
+    EXPECT_EQ(num_of_removed_chars("abc", "a"), 2);
+    EXPECT_EQ(num_of_removed_chars("abc", "bc"), 1);
+    EXPECT_EQ(num_of_removed_chars("bc", "a"), 2);
+
+    EXPECT_EQ(num_of_altered_chars("abc", "azc"), 1);
+    EXPECT_EQ(num_of_altered_chars("abc", "ayz"), 2);
+    EXPECT_EQ(num_of_altered_chars("abc", "xyz"), 3);
+
+    EXPECT_TRUE(is_max_one_edit_away("abc", "ab"));
+    EXPECT_TRUE(is_max_one_edit_away("ab", "abc"));
+    EXPECT_TRUE(is_max_one_edit_away("abc", "bc"));
+    EXPECT_TRUE(is_max_one_edit_away("ac", "abc"));
+    EXPECT_TRUE(is_max_one_edit_away("abc", "abc"));
+    EXPECT_TRUE(is_max_one_edit_away("abc", "azc"));
+    EXPECT_FALSE(is_max_one_edit_away("aa", "bb"));
+    EXPECT_FALSE(is_max_one_edit_away("ab", "abcd"));
 }
