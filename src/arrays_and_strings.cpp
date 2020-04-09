@@ -19,11 +19,11 @@ bool has_only_unique(std::string input){
 }
 
 TEST(Arrays_and_Strings, Question_1_1) {
-    EXPECT_TRUE(has_only_unique("ab"));
-    EXPECT_TRUE(has_only_unique("abcdefg"));
-    EXPECT_TRUE(has_only_unique("qwertyuiop"));
-    EXPECT_FALSE(has_only_unique("aa"));
-    EXPECT_FALSE(has_only_unique("bcdb"));
+  EXPECT_TRUE(has_only_unique("ab"));
+  EXPECT_TRUE(has_only_unique("abcdefg"));
+  EXPECT_TRUE(has_only_unique("qwertyuiop"));
+  EXPECT_FALSE(has_only_unique("aa"));
+  EXPECT_FALSE(has_only_unique("bcdb"));
 }
 
 /// Question 1.2
@@ -155,22 +155,50 @@ bool is_max_one_edit_away(std::string alpha, std::string beta){
 }
 
 TEST(Arrays_and_Strings, Question_1_5) {
-    EXPECT_EQ(num_of_removed_chars("abc", "ac"), 1);
-    EXPECT_EQ(num_of_removed_chars("abc", "abc"), 0);
-    EXPECT_EQ(num_of_removed_chars("abc", "a"), 2);
-    EXPECT_EQ(num_of_removed_chars("abc", "bc"), 1);
-    EXPECT_EQ(num_of_removed_chars("bc", "a"), 2);
+  EXPECT_EQ(num_of_removed_chars("abc", "ac"), 1);
+  EXPECT_EQ(num_of_removed_chars("abc", "abc"), 0);
+  EXPECT_EQ(num_of_removed_chars("abc", "a"), 2);
+  EXPECT_EQ(num_of_removed_chars("abc", "bc"), 1);
+  EXPECT_EQ(num_of_removed_chars("bc", "a"), 2);
 
-    EXPECT_EQ(num_of_altered_chars("abc", "azc"), 1);
-    EXPECT_EQ(num_of_altered_chars("abc", "ayz"), 2);
-    EXPECT_EQ(num_of_altered_chars("abc", "xyz"), 3);
+  EXPECT_EQ(num_of_altered_chars("abc", "azc"), 1);
+  EXPECT_EQ(num_of_altered_chars("abc", "ayz"), 2);
+  EXPECT_EQ(num_of_altered_chars("abc", "xyz"), 3);
 
-    EXPECT_TRUE(is_max_one_edit_away("abc", "ab"));
-    EXPECT_TRUE(is_max_one_edit_away("ab", "abc"));
-    EXPECT_TRUE(is_max_one_edit_away("abc", "bc"));
-    EXPECT_TRUE(is_max_one_edit_away("ac", "abc"));
-    EXPECT_TRUE(is_max_one_edit_away("abc", "abc"));
-    EXPECT_TRUE(is_max_one_edit_away("abc", "azc"));
-    EXPECT_FALSE(is_max_one_edit_away("aa", "bb"));
-    EXPECT_FALSE(is_max_one_edit_away("ab", "abcd"));
+  EXPECT_TRUE(is_max_one_edit_away("abc", "ab"));
+  EXPECT_TRUE(is_max_one_edit_away("ab", "abc"));
+  EXPECT_TRUE(is_max_one_edit_away("abc", "bc"));
+  EXPECT_TRUE(is_max_one_edit_away("ac", "abc"));
+  EXPECT_TRUE(is_max_one_edit_away("abc", "abc"));
+  EXPECT_TRUE(is_max_one_edit_away("abc", "azc"));
+  EXPECT_FALSE(is_max_one_edit_away("aa", "bb"));
+  EXPECT_FALSE(is_max_one_edit_away("ab", "abcd"));
+}
+
+// Question 1.6
+
+std::string compress(const std::string& input){
+  std::string ret = "";
+  char current = input.at(0);
+  unsigned num_reps = 1;
+  for (auto it = input.begin() + 1; it < input.end(); ++it) {
+     if (current != *it){
+       ret += current + std::to_string(num_reps);
+       current = *it;
+       num_reps = 1;
+     } else {
+        ++num_reps;
+     }
+  }
+  ret += current + std::to_string(num_reps);
+  if (ret.size() > input.size()) { ret = input; }
+  return ret;
+}
+
+TEST(Arrays_and_Strings, Question_1_6) {
+  EXPECT_EQ(compress("abc"), "abc");
+  EXPECT_EQ(compress("aaa"), "a3");
+  EXPECT_EQ(compress("aabb"), "a2b2");
+  EXPECT_EQ(compress("abbbcc"), "a1b3c2");
+  EXPECT_EQ(compress("aab"), "aab");
 }
