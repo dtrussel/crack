@@ -202,3 +202,34 @@ TEST(Arrays_and_Strings, Question_1_6) {
   EXPECT_EQ(compress("abbbcc"), "a1b3c2");
   EXPECT_EQ(compress("aab"), "aab");
 }
+
+// Question 1.7
+
+using Pixel = std::array<char, 4>;
+
+template <typename T, std::size_t N>
+using Matrix = std::array<std::array<T, N>, N>;
+
+template <typename T, std::size_t N>
+inline
+Matrix<T, N> rotate90degree(const Matrix<T, N>& input){
+  Matrix<T, N> ret;
+  for (std::size_t row = 0; row < N; ++row) {
+    for (std::size_t col = 0; col < N; ++col) {
+      ret.at(row).at(col) = input.at(col).at(N - 1 - row);
+    }
+  }
+  return ret;
+}
+
+TEST(Arrays_and_Strings, Question_1_7) {
+  Matrix<int, 3> in({
+    {{1, 2, 5},
+     {3, 4, 6},
+      9, 7, 8} });
+  Matrix<int, 3> out({
+    {{5, 6, 8},
+     {2, 4, 7},
+     {1, 3, 9}} });
+  EXPECT_EQ(rotate90degree(in), out);
+}
