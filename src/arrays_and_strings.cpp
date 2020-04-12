@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include <set>
+#include <list>
 
 /// Question 1.1
 
@@ -207,8 +208,8 @@ TEST(Arrays_and_Strings, Question_1_6) {
 
 using Pixel = std::array<char, 4>;
 
-template <typename T, std::size_t N>
-using Matrix = std::array<std::array<T, N>, N>;
+template <typename T, std::size_t N, std::size_t M = N>
+using Matrix = std::array<std::array<T, M>, N>;
 
 template <typename T, std::size_t N>
 inline
@@ -232,4 +233,46 @@ TEST(Arrays_and_Strings, Question_1_7) {
      {2, 4, 7},
      {1, 3, 9}} });
   EXPECT_EQ(rotate90degree(in), out);
+}
+
+// Question 1.8
+
+using IndexList = std::list<std::pair<std::size_t, std::size_t>>;
+
+template <typename T, std::size_t N,std::size_t M>
+void erase_row_col(Matrix<T, N, M>& input, const IndexList& indices){
+  for (const auto& entry : indices) {
+    for (std::size_t col = 0; col < M; ++col) {
+      input.at(entry.first).at(col) = 0;
+    }
+    for (std::size_t row = 0; row < N; ++row) {
+      input.at(row).at(entry.second) = 0;
+    }
+  }
+}
+
+template <typename T, std::size_t N,std::size_t M>
+void zero_row_col(Matrix<T, N, M>& input){
+  IndexList indices;
+  for (std::size_t row = 0; row < N; ++row) {
+    for (std::size_t col = 0; col < M; ++col) {
+      if (0 == input.at(row).at(col)) {
+        indices.push_back({row, col});
+      }
+    }
+  }
+  erase_row_col(input, indices);
+}
+
+TEST(Arrays_and_Strings, Question_1_8) {
+  Matrix<int, 3> in({
+    {{1, 2, 5},
+     {3, 4, 0},
+      9, 7, 8} });
+  Matrix<int, 3> out({
+    {{1, 2, 0},
+     {0, 0, 0},
+      9, 7, 0} });
+  zero_row_col(in);
+  EXPECT_EQ(in, out);
 }
