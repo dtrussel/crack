@@ -1,4 +1,3 @@
-
 #include <gtest/gtest.h>
 
 #include <set>
@@ -275,4 +274,26 @@ TEST(Arrays_and_Strings, Question_1_8) {
       9, 7, 0} });
   zero_row_col(in);
   EXPECT_EQ(in, out);
+}
+
+// Question 1.9
+
+bool is_substring(const std::string& whole, const std::string& word){
+  bool ret = false;
+  if (whole.find(word) != std::string::npos) {
+    ret = true;
+  }
+  return ret;
+}
+
+bool is_rotation_of(const std::string& alpha, const std::string& beta){
+  const auto gamma = alpha + alpha;
+  return is_substring(gamma, beta);
+}
+
+TEST(Arrays_and_Strings, Question_1_9) {
+  EXPECT_TRUE(is_rotation_of("erbottlewat", "waterbottle"));
+  EXPECT_TRUE(is_rotation_of("abc", "cab"));
+  EXPECT_TRUE(is_rotation_of("a", "a"));
+  EXPECT_FALSE(is_rotation_of("abc", "def"));
 }

@@ -16,7 +16,9 @@ if(NOT googletest_POPULATED)
   add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 endif()
 
-add_executable(run-crack src/arrays_and_strings.cpp)
+add_executable(run-crack
+  src/arrays_and_strings.cpp
+  src/linked_lists.cpp)
 
 target_link_libraries(run-crack gtest gtest_main pthread)
 
